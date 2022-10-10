@@ -22,7 +22,15 @@ function repeater(str, options) {
   if (!('addition' in options)) {
     additionStr = '';
   } else if (('addition' in options) && !options.additionRepeatTimes) {
-    additionStr = '';
+    additionStr = options.addition + '';
+    additionArr.push(additionStr);
+  
+    if ('additionSeparator' in options) {
+    additionResultStr = additionArr.join(options.additionSeparator + '');
+    } else {
+    additionResultStr = additionArr.join('|');
+    }
+  
   } else if (('addition' in options) && options.additionRepeatTimes) {
     additionStr = options.addition + '';
     for (let i = 0; i < options.additionRepeatTimes; i++) {
