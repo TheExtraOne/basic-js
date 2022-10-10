@@ -16,31 +16,41 @@ const { NotImplementedError } = require('../extensions/index.js');
  *
  */
 function repeater(str, options) {
-  let addition = '';
-  if (options.additionSeparator) {
-    addition = options.addition + options.additionSeparator;
-  } else if (!options.additionSeparator && options.additionRepeatTimes > 1){
-    addition = options.addition + '|';
-  } else{
-    addition = options.addition;
+  let additionStr = '';
+  let additionArr = [];
+  let additionResultStr = '';
+  if (!('addition' in options)) {
+    additionStr = '';
+  } else if (('addition' in options) && !options.additionRepeatTimes) {
+    additionStr = '';
+  } else if (('addition' in options) && options.additionRepeatTimes) {
+    additionStr = options.addition + '';
+    for (let i = 0; i < options.additionRepeatTimes; i++) {
+    additionArr.push(additionStr);
+    }
+    if ('additionSeparator' in options) {
+    additionResultStr = additionArr.join(options.additionSeparator + '');
+    } else {
+    additionResultStr = additionArr.join('|');
+    }
   }
 
-  let repeatedAddition = '';
-  for (let i = 0; i < options.additionRepeatTimes; i++) {
-    repeatedAddition += addition;
-  }
-  
-  let resultPart = str + repeatedAddition;
-  let result = [];
-  for (let i = 0; i < options.repeatTimes; i++) {
-    result.push(resultPart);
-  }
-  if (options.separator) {
-    result = result.join(options.separator);
+  let mainPartStr = str + additionResultStr;
+  let resultArr = [];
+  let result = '';
+  if (options.repeatTimes) {
+    for (let i = 0; i < options.repeatTimes; i++) {
+    resultArr.push(mainPartStr);
+    }
+    if ('separator' in options) {
+    result = resultArr.join(options.separator + '');
+    } else {
+    result = resultArr.join('+');
+    }
+    return result;
   } else {
-    result = result.join('+')
+    return mainPartStr;
   }
-  return result;
 }
 
 module.exports = {
